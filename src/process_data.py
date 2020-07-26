@@ -14,6 +14,7 @@ def process_data():
     df = pd.read_csv("./data/downloaded_data.csv")
     json_output = {}
 
+    # Country case and death data
     for country in list(df["countriesAndTerritories"].unique()):
         country_table = df[df["countriesAndTerritories"] == country]
         json_output[country] = {
@@ -21,6 +22,25 @@ def process_data():
             "cases": list(country_table["cases"]),
             "deaths": list(country_table["deaths"])
         }
+
+    # All Data
+    dates = list(df["dateRep"].unique())
+    json_output["All"] = {"dates": dates, "cases": [], "deaths": []}
+
+    for date in dates:
+        total_cases = 0
+        total_deaths = 0
+
+        for country in list(df["countriesAndTerritories"].unique()):
+            country_table = df[df["countriesAndTerritories"] == country]
+            date_table = country_table[country_table["dateRep"] == date]
+            if len(date_table["cases"].values) > 0:
+                total_cases += int(date_table["cases"].values[0])
+            if len(date_table["deaths"].values) > 0:
+                total_deaths += int(date_table["deaths"].values[0])
+
+        json_output["All"]["cases"].append(total_cases)
+        json_output["All"]["deaths"].append(total_deaths)
 
     with open('./data/processed_data.json', 'w') as outfile:
         json.dump(json_output, outfile)
