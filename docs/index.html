@@ -1,1 +1,60 @@
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
+</head>
+
 <h1>Hi Omar</h1>
+
+<div>
+    <label for="countries">Choose a country</label>
+    <select name="countries" id="countries" onchange="updateChart()"></select>
+</div>
+
+<div>
+    <canvas id="myChart" width="5rem" height="5rem"></canvas>
+</div>
+
+
+<script>
+    //Chart Script
+    var ctx = document.getElementById('myChart');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [
+                {
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    borderWidth: 1
+                },
+                {
+                    label: '# of People',
+                    data: [13, 5, 16, 2, 7, 0],
+                    borderWidth: 1
+                },
+            
+            ]
+        },
+    });
+
+    // Populate Country Selector
+    var countryList = ['Brazil', 'China']
+    var countrySelect = document.getElementById('countries');
+    for (index in countryList) {
+        countrySelect.options[countrySelect.options.length] = new Option(countryList[index], index)
+    }
+
+    // Update Chart on Country Select
+    function updateChart() {
+        
+    }
+
+
+
+
+</script>
