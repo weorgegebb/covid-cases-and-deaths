@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 import json
+import time
 
 
 def download_data():
@@ -8,13 +9,16 @@ def download_data():
     r = requests.get(url)
     with open('./data/downloaded_data.csv', 'wb') as f:
         f.write(r.content)
+    print("Data Downloaded")
 
 
 def process_data():
     df = pd.read_csv("./data/downloaded_data.csv")
     json_output = {}
+    print("Read In Data")
 
     # Country case and death data
+    start_time = time.time()
     for country in list(df["countriesAndTerritories"].unique()):
         country_table = df[df["countriesAndTerritories"] == country]
         json_output[country] = {
@@ -22,28 +26,25 @@ def process_data():
             "cases": list(country_table["cases"]),
             "deaths": list(country_table["deaths"])
         }
+    end_time = time.time()
+    print(f"Calculated Country Cases and Deaths ({end_time - start_time}s)")
 
     # All Data
+    start_time = time.time()
     dates = list(df["dateRep"].unique())
     json_output["All"] = {"dates": dates, "cases": [], "deaths": []}
 
     for date in dates:
-        total_cases = 0
-        total_deaths = 0
-
-        for country in list(df["countriesAndTerritories"].unique()):
-            country_table = df[df["countriesAndTerritories"] == country]
-            date_table = country_table[country_table["dateRep"] == date]
-            if len(date_table["cases"].values) > 0:
-                total_cases += int(date_table["cases"].values[0])
-            if len(date_table["deaths"].values) > 0:
-                total_deaths += int(date_table["deaths"].values[0])
-
-        json_output["All"]["cases"].append(total_cases)
-        json_output["All"]["deaths"].append(total_deaths)
+        total_cases = df[df["dateRep"] == date]["cases"].sum()
+        total_deaths = df[df["dateRep"] == date]["deaths"].sum()
+        json_output["All"]["cases"].append(int(total_cases))
+        json_output["All"]["deaths"].append(int(total_deaths))
+    end_time = time.time()
+    print(f"Calculated All Cases and Deaths ({end_time - start_time}s)")
 
     with open('./data/processed_data.json', 'w') as outfile:
         json.dump(json_output, outfile)
+    print("Saved File")
 
 
 def main():
