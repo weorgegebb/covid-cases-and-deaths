@@ -9,7 +9,7 @@
     <script src="../data/processed_data.js" id="json_data"></script>
 </head>
 
-<h1>Hi Omar</h1>
+<h1>Covid Cases and Deaths by Country</h1>
 
 <div>
     <label for="countries">Choose a country</label>
@@ -17,7 +17,7 @@
 </div>
 
 <div>
-    <canvas id="myChart" width="5rem" height="5rem"></canvas>
+    <canvas id="myChart" width="5rem" height="4rem" class="chart_css"></canvas>
 </div>
 
 
@@ -46,12 +46,14 @@
                 {
                     label: '# of deaths',
                     data: covid_data[defaultCountry].deaths,
-                    borderWidth: 1
+                    borderWidth: 1,
+                    backgroundColor: '#FF6060'
                 },
                 {
                     label: '# of cases',
-                    data: covid_data[defaultCountry].case,
-                    borderWidth: 1
+                    data: covid_data[defaultCountry].cases,
+                    borderWidth: 1,
+                    backgroundColor: '#7560FF'
                 },
             
             ]
@@ -60,15 +62,16 @@
     
     // Update Chart on Country Select
     function updateChart() {
-        //Destroy existing graph 
-        ctx.destroy();
+        //Destroy existing graph
+        var ctx = document.getElementById('myChart').getContext("2d");
+        ctx.remove;
         // Get selected Country
         var e = document.getElementById("countries")
         var country = e.options[e.selectedIndex].text;
         console.log(country)
-        console.log(covid_data[country].dates)
+        console.log(covid_data[country].cases)
         //Chart Script
-        var ctx = document.getElementById('myChart');
+        ctx = document.getElementById('myChart')
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -77,12 +80,14 @@
                     {
                         label: '# of deaths',
                         data: covid_data[country].deaths,
-                        borderWidth: 1
+                        borderWidth: 1,
+                        backgroundColor: '#FF6060'
                     },
                     {
                         label: '# of cases',
-                        data: covid_data[country].case,
-                        borderWidth: 1
+                        data: covid_data[country].cases,
+                        borderWidth: 1,
+                        backgroundColor: '#7560FF'
                     },
                 
                 ]
@@ -90,7 +95,11 @@
         }); 
     }
 
-
-
-
 </script>
+
+<style>
+    .chart_css {
+        zoom: 80%;
+    }
+
+</style>
