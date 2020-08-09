@@ -1,1 +1,101 @@
-<h1>Hi Omar</h1>
+<head>
+    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
+    <script src="../data/processed_data.js" id="json_data"></script>
+</head>
+
+<h1>Covid Cases and Deaths by Country</h1>
+
+<div>
+    <label for="countries">Choose a country</label>
+    <select name="countries" id="countries" onchange="updateChart()"></select>
+</div>
+
+<div>
+    <canvas id="myChart" width="5rem" height="4rem" class="chart_css"></canvas>
+</div>
+
+
+<script>
+    // get JSON data
+    var covid_data = data
+    var myChart
+    var countryList = Object.keys(covid_data)
+
+    // Populate Country Selector
+    var countrySelect = document.getElementById('countries');
+    for (index in countryList) {
+        countrySelect.options[countrySelect.options.length] = new Option(countryList[index], index)
+    }
+
+
+    //Starting Chart Script
+    var ctx = document.getElementById('myChart').getContext("2d");
+    var defaultCountry = 'Afghanistan';
+    myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: covid_data[defaultCountry].dates,
+            datasets: [
+                {
+                    label: '# of deaths',
+                    data: covid_data[defaultCountry].deaths,
+                    borderWidth: 1,
+                    backgroundColor: '#FF6060'
+                },
+                {
+                    label: '# of cases',
+                    data: covid_data[defaultCountry].cases,
+                    borderWidth: 1,
+                    backgroundColor: '#7560FF'
+                },
+            
+            ]
+        },
+    }); 
+    
+    // Update Chart on Country Select
+    function updateChart() {
+        //Destroy existing graph
+        var ctx = document.getElementById('myChart').getContext("2d");
+        myChart.destroy();
+        // Get selected Country
+        var e = document.getElementById("countries")
+        var country = e.options[e.selectedIndex].text;
+        //Chart Script
+        myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: covid_data[country].dates,
+                datasets: [
+                    {
+                        label: '# of deaths',
+                        data: covid_data[country].deaths,
+                        borderWidth: 1,
+                        backgroundColor: '#FF6060'
+                    },
+                    {
+                        label: '# of cases',
+                        data: covid_data[country].cases,
+                        borderWidth: 1,
+                        backgroundColor: '#7560FF'
+                    },
+                
+                ]
+            },
+        }); 
+    }
+
+</script>
+
+<style>
+    .chart_css {
+        zoom: 80%;
+    }
+
+</style>
