@@ -24,8 +24,7 @@
 <script>
     // get JSON data
     var covid_data = data
-    console.log(covid_data)
-
+    var myChart
     var countryList = Object.keys(covid_data)
 
     // Populate Country Selector
@@ -36,9 +35,9 @@
 
 
     //Starting Chart Script
-    var ctx = document.getElementById('myChart');
+    var ctx = document.getElementById('myChart').getContext("2d");
     var defaultCountry = 'Afghanistan';
-    var myChart = new Chart(ctx, {
+    myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: covid_data[defaultCountry].dates,
@@ -64,15 +63,12 @@
     function updateChart() {
         //Destroy existing graph
         var ctx = document.getElementById('myChart').getContext("2d");
-        ctx.remove;
+        myChart.destroy();
         // Get selected Country
         var e = document.getElementById("countries")
         var country = e.options[e.selectedIndex].text;
-        console.log(country)
-        console.log(covid_data[country].cases)
         //Chart Script
-        ctx = document.getElementById('myChart')
-        var myChart = new Chart(ctx, {
+        myChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: covid_data[country].dates,
